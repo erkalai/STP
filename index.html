@@ -1,3 +1,4 @@
+<meta charset="UTF-8">
 <title>Photoshop Workshop</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,6 +39,38 @@ body {
 h1, h2, h3, h4, h5 { font-family: 'Syne', system-ui, sans-serif; text-wrap: balance; }
 img { max-width: 100%; }
 a { text-decoration: none; color: inherit; }
+
+/* All sections except hero use Arial Black */
+section:not(.hero),
+section:not(.hero) h1,
+section:not(.hero) h2,
+section:not(.hero) h3,
+section:not(.hero) h4,
+section:not(.hero) h5,
+section:not(.hero) p,
+section:not(.hero) span,
+section:not(.hero) button,
+section:not(.hero) a,
+section:not(.hero) li,
+section:not(.hero) td,
+section:not(.hero) th,
+footer, footer * {
+  font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif;
+}
+
+/* WATERMARK */
+.watermark {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 350px;
+  height: 350px;
+  background: url('images/SenZ.jpeg') center/contain no-repeat;
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 9999;
+}
 
 /* REVEAL ANIMATIONS */
 .reveal {
@@ -153,21 +186,10 @@ a { text-decoration: none; color: inherit; }
 .hero-photo-card {
   position: relative;
   width: 240px;
-  border-radius: 20px;
-  padding: 5px;
-  background: linear-gradient(135deg, var(--accent), var(--violet), var(--cyan));
-  background-size: 300% 300%;
-  animation: cardGradient 4s ease-in-out infinite;
   transition: transform 0.15s ease-out;
   transform-style: preserve-3d;
 }
-@keyframes cardGradient {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
 .hero-photo-card-inner {
-  background: var(--bg);
-  border-radius: 16px;
   overflow: hidden;
   position: relative;
 }
@@ -177,6 +199,7 @@ a { text-decoration: none; color: inherit; }
   object-fit: cover;
   object-position: top center;
   display: block;
+  border-radius: 50%;
 }
 .hero-photo-info {
   padding: 12px 16px;
@@ -513,47 +536,65 @@ a { text-decoration: none; color: inherit; }
 .tab-panel.active { display: block; }
 
 /* TOOL CARDS */
-.tools-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 16px;
+.tools-carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 10px;
 }
-.tool-card {
+.tools-carousel-arrow {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  flex-shrink: 0;
+}
+.tools-carousel-arrow:hover {
+  background: rgba(123,97,255,0.15);
+  border-color: var(--violet);
+  transform: scale(1.1);
+}
+.tools-carousel-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 24px;
-  transition: border-color 0.3s, transform 0.2s, box-shadow 0.3s;
-  cursor: default;
+  padding: 32px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
   position: relative;
   overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
-.tool-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 3px;
-  height: 100%;
-  border-radius: 3px 0 0 3px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.tool-card:hover::before { opacity: 1; }
-.tool-card[data-level="beginner"]::before { background: var(--cyan); }
-.tool-card[data-level="intermediate"]::before { background: var(--violet); }
-.tool-card[data-level="advanced"]::before { background: var(--accent); }
-.tool-card:hover {
+.tools-carousel-card:hover {
   border-color: rgba(255,255,255,0.1);
-  transform: translateY(-2px);
   box-shadow: var(--shadow);
 }
-.tool-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.tools-carousel-icon {
+  width: 120px;
+  height: 100px;
+  object-fit: contain;
+  margin: 0 auto 16px;
+  display: block;
+  filter: drop-shadow(0 0 12px rgba(123,97,255,0.3));
+}
+.tools-carousel-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.tools-carousel-shortcut {
   margin-bottom: 10px;
 }
-.tool-header h3 { font-size: 1rem; font-weight: 700; }
 .kbd {
   display: inline-flex;
   align-items: center;
@@ -577,14 +618,31 @@ a { text-decoration: none; color: inherit; }
   text-transform: uppercase;
   padding: 3px 8px;
   border-radius: 4px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   display: inline-block;
 }
 .level-beginner { background: var(--cyan-glow); color: var(--cyan); }
 .level-intermediate { background: var(--violet-glow); color: var(--violet); }
 .level-advanced { background: var(--accent-glow); color: var(--accent); }
-.tool-card p { font-size: 14px; color: var(--text-dim); line-height: 1.7; }
-.tool-card strong { color: var(--text); }
+.tools-carousel-desc {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.7;
+  text-align: left;
+}
+.tools-carousel-desc strong { color: var(--text); }
+.tools-carousel-counter {
+  text-align: center;
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+.tools-carousel-hint {
+  text-align: center;
+  margin-top: 6px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.3);
+}
 
 /* AI SECTION */
 .ai-section {
@@ -1305,9 +1363,9 @@ a { text-decoration: none; color: inherit; }
   .tm-box { padding: 24px 16px; }
 }
 
-/* TOOL CHALLENGE GAME */
+/* TOOL SPINNER DICE GAME */
 .tc-container {
-  max-width: 640px;
+  max-width: 800px;
   margin: 0 auto;
 }
 .tc-box {
@@ -1323,65 +1381,113 @@ a { text-decoration: none; color: inherit; }
 .tc-box.tc-correct { border-color: #00E5CC; box-shadow: 0 0 40px rgba(0,229,204,0.15); }
 .tc-box.tc-wrong { border-color: #FF5C3A; box-shadow: 0 0 40px rgba(255,92,58,0.15); }
 
-.tc-spinner-area {
-  width: 180px;
-  height: 180px;
-  margin: 0 auto 28px;
-  position: relative;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(123,97,255,0.08) 0%, transparent 70%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.tc-game-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 32px;
+  align-items: start;
 }
-.tc-spinner-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 2px solid var(--border);
-  border-top-color: var(--violet);
-  transition: transform 0.1s;
-}
-.tc-spinner-ring.spinning {
-  animation: tcSpin 0.3s linear infinite;
-}
-@keyframes tcSpin {
-  to { transform: rotate(360deg); }
-}
-.tc-tool-icon {
-  width: 100px;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 2;
-}
-.tc-tool-icon svg {
-  width: 72px;
-  height: 72px;
-  transition: transform 0.3s;
-  filter: drop-shadow(0 0 12px rgba(123,97,255,0.3));
-}
-.tc-tool-icon.tc-icon-pop svg {
-  animation: tcIconPop 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-@keyframes tcIconPop {
-  0% { transform: scale(0.3) rotate(-20deg); opacity: 0; }
-  60% { transform: scale(1.15) rotate(5deg); opacity: 1; }
-  100% { transform: scale(1) rotate(0); opacity: 1; }
+@media (max-width: 700px) {
+  .tc-game-layout { grid-template-columns: 1fr; }
 }
 
-.tc-prompt {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 20px;
-  font-family: 'Syne', sans-serif;
+.tc-dice-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 }
+
+.tc-tool-display {
+  width: 180px;
+  height: 180px;
+  margin: 0 auto;
+  border-radius: 20px;
+  border: 2px solid rgba(123,97,255,0.3);
+  background: linear-gradient(145deg, #1a1d2a, #12141e);
+  box-shadow: 0 0 30px rgba(123,97,255,0.08), inset 0 0 20px rgba(123,97,255,0.05);
+  overflow: hidden;
+  position: relative;
+}
+.tc-tool-display img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.tc-tool-display.blinking {
+  animation: tcBlink 0.12s steps(1) infinite;
+}
+@keyframes tcBlink {
+  0% { border-color: rgba(123,97,255,0.5); box-shadow: 0 0 24px rgba(123,97,255,0.25); }
+  50% { border-color: rgba(0,229,204,0.5); box-shadow: 0 0 24px rgba(0,229,204,0.2); }
+}
+.tc-tool-display.landed {
+  border-color: var(--violet);
+  box-shadow: 0 0 40px rgba(123,97,255,0.35), 0 0 80px rgba(123,97,255,0.1);
+  animation: tcLanded 0.6s ease;
+}
+@keyframes tcLanded {
+  0% { transform: scale(1.08); }
+  50% { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+.tc-glow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(123,97,255,0.12) 0%, rgba(0,229,204,0.06) 50%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+  animation: tcGlowPulse 2s ease-in-out infinite;
+}
+@keyframes tcGlowPulse {
+  0%, 100% { transform: translate(-50%,-50%) scale(1); opacity: 0.6; }
+  50% { transform: translate(-50%,-50%) scale(1.2); opacity: 1; }
+}
+.tc-spin-btn {
+  margin-top: 14px;
+  padding: 10px 32px;
+  background: linear-gradient(135deg, var(--violet), #9b6dff);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 4px 18px rgba(123,97,255,0.35);
+}
+.tc-spin-btn:hover { transform: scale(1.06); box-shadow: 0 6px 24px rgba(123,97,255,0.5); }
+.tc-spin-btn:disabled { opacity: .45; cursor: default; transform: none; }
+
+.tc-spin-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--violet);
+  letter-spacing: 0.05em;
+  min-height: 22px;
+}
+
+.tc-answer-panel {
+  text-align: left;
+}
+.tc-answer-panel h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: var(--text);
+}
+
 .tc-options {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
   margin-bottom: 16px;
 }
@@ -1400,6 +1506,7 @@ a { text-decoration: none; color: inherit; }
   display: flex;
   align-items: center;
   gap: 10px;
+  text-align: left;
 }
 .tc-opt:hover:not(.disabled) {
   background: rgba(123,97,255,0.08);
@@ -1418,6 +1525,19 @@ a { text-decoration: none; color: inherit; }
   border-color: var(--accent);
   color: var(--accent);
 }
+.tc-opt .tc-label-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: rgba(123,97,255,0.12);
+  color: var(--violet);
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
 .tc-opt .tc-kbd {
   background: rgba(255,255,255,0.06);
   font-size: 11px;
@@ -1428,6 +1548,24 @@ a { text-decoration: none; color: inherit; }
   margin-left: auto;
   color: var(--text-dim);
 }
+
+.tc-answer-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: var(--violet);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.02em;
+}
+.tc-answer-btn:hover:not(:disabled) { filter: brightness(1.15); transform: translateY(-2px); }
+.tc-answer-btn:disabled { opacity: 0.4; cursor: default; }
+
 .tc-header {
   display: flex;
   align-items: center;
@@ -1449,6 +1587,13 @@ a { text-decoration: none; color: inherit; }
   color: var(--violet);
   min-height: 20px;
   margin-bottom: 8px;
+}
+.tc-prompt {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 20px;
+  font-family: 'Syne', sans-serif;
 }
 .tc-feedback {
   min-height: 28px;
@@ -1500,6 +1645,23 @@ a { text-decoration: none; color: inherit; }
   font-weight: 700;
   margin-bottom: 24px;
 }
+.tc-progress-dots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.tc-progress-dots .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  transition: background 0.3s;
+}
+.tc-progress-dots .dot.done { background: #00E5CC; }
+.tc-progress-dots .dot.wrong-dot { background: var(--accent); }
+.tc-progress-dots .dot.current { background: var(--violet); box-shadow: 0 0 8px var(--violet); }
 .tc-timer-bar {
   height: 4px;
   background: rgba(255,255,255,0.06);
@@ -1546,9 +1708,46 @@ a { text-decoration: none; color: inherit; }
   font-size: 12px;
   color: #ddd;
   transition: background 0.15s;
+  position: relative;
 }
 .ps-menu-item:hover { background: #505050; }
 .ps-menu-item.ps-active-menu { background: #4a6fa5; color: #fff; }
+.ps-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #2a2a2a;
+  border: 1px solid #555;
+  border-radius: 0 0 4px 4px;
+  min-width: 220px;
+  z-index: 100;
+  padding: 4px 0;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+}
+.ps-menu-item.ps-active-menu .ps-dropdown { display: block; }
+.ps-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 20px;
+  font-size: 12px;
+  color: #ccc;
+  cursor: default;
+  white-space: nowrap;
+}
+.ps-dropdown-item:hover { background: #4a6fa5; color: #fff; }
+.ps-dropdown-item .ps-shortcut {
+  color: #888;
+  font-size: 11px;
+  margin-left: 30px;
+}
+.ps-dropdown-item:hover .ps-shortcut { color: #ccc; }
+.ps-dropdown-sep {
+  height: 1px;
+  background: #444;
+  margin: 4px 0;
+}
 .ps-optionsbar {
   display: flex;
   align-items: center;
@@ -2017,7 +2216,9 @@ a { text-decoration: none; color: inherit; }
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .about-grid, .type-grid { grid-template-columns: 1fr; }
-  .tools-grid, .ai-grid, .color-grid { grid-template-columns: 1fr; }
+  .ai-grid, .color-grid { grid-template-columns: 1fr; }
+  .tools-carousel { flex-direction: row; gap: 10px; }
+  .tools-carousel-card { padding: 20px; }
   .hero { padding: 100px 20px 60px; min-height: auto; }
   .section, .section-full { padding: 64px 20px; }
   .nav { padding: 0 16px; }
@@ -2116,6 +2317,8 @@ a { text-decoration: none; color: inherit; }
 </style>
 
 <!-- NAV -->
+<div class="watermark"></div>
+
 <nav class="nav" id="nav">
   <div class="nav-inner">
     <a href="#" class="nav-logo">
@@ -2164,26 +2367,14 @@ a { text-decoration: none; color: inherit; }
       <div class="hero-photo-glow"></div>
       <div class="hero-photo-card" id="heroPhotoCard">
         <div class="hero-photo-card-inner">
-          <img src="Tamil.jpeg" alt="SENTHAMIZH M">
+          <img src="images/Tamil.png" alt="SENTHAMIZH M">
           <div class="hero-photo-info">
             <h4>SENTHAMIZH M</h4>
             <p>Workshop Instructor</p>
           </div>
         </div>
       </div>
-      <!-- Floating skill badges -->
-      <div class="float-badge fb-1">
-        <span class="fb-dot" style="background:var(--accent);"></span> Photoshop
-      </div>
-      <div class="float-badge fb-2">
-        <span class="fb-dot" style="background:var(--violet);"></span> AI Design
-      </div>
-      <div class="float-badge fb-3">
-        <span class="fb-dot" style="background:var(--cyan);"></span> Color Theory
-      </div>
-      <div class="float-badge fb-4">
-        <span class="fb-dot" style="background:#E8B830;"></span> Typography
-      </div>
+      <!-- Decorative orbs only -->
       <!-- Decorative orbs -->
       <div class="hero-orb orb-1"></div>
       <div class="hero-orb orb-2"></div>
@@ -2431,17 +2622,170 @@ a { text-decoration: none; color: inherit; }
       <button class="ps-fullscreen-btn" id="psFullscreenBtn" title="Maximize / Restore">⛶</button>
       <!-- MENU BAR -->
       <div class="ps-menubar">
-        <div class="ps-menu-item">File</div>
-        <div class="ps-menu-item">Edit</div>
-        <div class="ps-menu-item">Image</div>
-        <div class="ps-menu-item">Layer</div>
-        <div class="ps-menu-item">Type</div>
-        <div class="ps-menu-item">Select</div>
-        <div class="ps-menu-item">Filter</div>
-        <div class="ps-menu-item">3D</div>
-        <div class="ps-menu-item">View</div>
-        <div class="ps-menu-item">Window</div>
-        <div class="ps-menu-item">Help</div>
+        <div class="ps-menu-item" data-menu="file">File
+          <div class="ps-dropdown">
+            <div class="ps-dropdown-item"><span>New...</span><span class="ps-shortcut">Ctrl+N</span></div>
+            <div class="ps-dropdown-item"><span>Open...</span><span class="ps-shortcut">Ctrl+O</span></div>
+            <div class="ps-dropdown-item"><span>Open Recent</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Close</span><span class="ps-shortcut">Ctrl+W</span></div>
+            <div class="ps-dropdown-item"><span>Save</span><span class="ps-shortcut">Ctrl+S</span></div>
+            <div class="ps-dropdown-item"><span>Save As...</span><span class="ps-shortcut">Ctrl+Shift+S</span></div>
+            <div class="ps-dropdown-item"><span>Export As...</span><span class="ps-shortcut">Alt+Shift+Ctrl+W</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Place Embedded...</span></div>
+            <div class="ps-dropdown-item"><span>Place Linked...</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Print...</span><span class="ps-shortcut">Ctrl+P</span></div>
+          </div>
+        </div>
+        <div class="ps-menu-item" data-menu="edit">Edit
+          <div class="ps-dropdown">
+            <div class="ps-dropdown-item"><span>Undo</span><span class="ps-shortcut">Ctrl+Z</span></div>
+            <div class="ps-dropdown-item"><span>Redo</span><span class="ps-shortcut">Ctrl+Shift+Z</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Cut</span><span class="ps-shortcut">Ctrl+X</span></div>
+            <div class="ps-dropdown-item"><span>Copy</span><span class="ps-shortcut">Ctrl+C</span></div>
+            <div class="ps-dropdown-item"><span>Copy Merged</span><span class="ps-shortcut">Ctrl+Shift+C</span></div>
+            <div class="ps-dropdown-item"><span>Paste</span><span class="ps-shortcut">Ctrl+V</span></div>
+            <div class="ps-dropdown-item"><span>Paste Special</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Free Transform</span><span class="ps-shortcut">Ctrl+T</span></div>
+            <div class="ps-dropdown-item"><span>Content-Aware Fill...</span><span class="ps-shortcut">Shift+F5</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Preferences</span><span class="ps-shortcut">&#9656;</span></div>
+          </div>
+        </div>
+        <div class="ps-menu-item" data-menu="image">Image
+          <div class="ps-dropdown">
+            <div class="ps-dropdown-item"><span>Mode</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-item"><span>Adjustments</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Image Size...</span><span class="ps-shortcut">Alt+Ctrl+I</span></div>
+            <div class="ps-dropdown-item"><span>Canvas Size...</span><span class="ps-shortcut">Alt+Ctrl+C</span></div>
+            <div class="ps-dropdown-item"><span>Image Rotation</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Crop</span></div>
+            <div class="ps-dropdown-item"><span>Trim...</span></div>
+            <div class="ps-dropdown-item"><span>Reveal All</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Duplicate...</span></div>
+          </div>
+        </div>
+        <div class="ps-menu-item" data-menu="layer">Layer
+          <div class="ps-dropdown">
+            <div class="ps-dropdown-item"><span>New</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-item"><span>Duplicate Layer...</span><span class="ps-shortcut">Ctrl+J</span></div>
+            <div class="ps-dropdown-item"><span>Delete</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Layer Style</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-item"><span>Smart Filter</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>New Adjustment Layer</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-item"><span>Group Layers</span><span class="ps-shortcut">Ctrl+G</span></div>
+            <div class="ps-dropdown-item"><span>Ungroup Layers</span><span class="ps-shortcut">Ctrl+Shift+G</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Merge Down</span><span class="ps-shortcut">Ctrl+E</span></div>
+            <div class="ps-dropdown-item"><span>Merge Visible</span><span class="ps-shortcut">Ctrl+Shift+E</span></div>
+            <div class="ps-dropdown-item"><span>Flatten Image</span></div>
+          </div>
+        </div>
+        <div class="ps-menu-item" data-menu="type">Type
+          <div class="ps-dropdown">
+            <div class="ps-dropdown-item"><span>Panels</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-item"><span>Anti-Alias</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Create Work Path</span></div>
+            <div class="ps-dropdown-item"><span>Convert to Shape</span></div>
+            <div class="ps-dropdown-item"><span>Rasterize Type Layer</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Warp Text...</span></div>
+            <div class="ps-dropdown-item"><span>Match Font...</span></div>
+          </div>
+        </div>
+        <div class="ps-menu-item" data-menu="select">Select
+          <div class="ps-dropdown">
+            <div class="ps-dropdown-item"><span>All</span><span class="ps-shortcut">Ctrl+A</span></div>
+            <div class="ps-dropdown-item"><span>Deselect</span><span class="ps-shortcut">Ctrl+D</span></div>
+            <div class="ps-dropdown-item"><span>Reselect</span><span class="ps-shortcut">Ctrl+Shift+D</span></div>
+            <div class="ps-dropdown-item"><span>Inverse</span><span class="ps-shortcut">Ctrl+Shift+I</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>All Layers</span><span class="ps-shortcut">Ctrl+Alt+A</span></div>
+            <div class="ps-dropdown-item"><span>Color Range...</span></div>
+            <div class="ps-dropdown-item"><span>Focus Area...</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Select and Mask...</span><span class="ps-shortcut">Alt+Ctrl+R</span></div>
+            <div class="ps-dropdown-item"><span>Modify</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-item"><span>Grow</span></div>
+            <div class="ps-dropdown-item"><span>Similar</span></div>
+          </div>
+        </div>
+        <div class="ps-menu-item" data-menu="filter">Filter
+          <div class="ps-dropdown">
+            <div class="ps-dropdown-item"><span>Last Filter</span><span class="ps-shortcut">Ctrl+F</span></div>
+            <div class="ps-dropdown-item"><span>Convert for Smart Filters</span></div>
+            <div class="ps-dropdown-item"><span>Neural Filters...</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Camera Raw Filter...</span><span class="ps-shortcut">Ctrl+Shift+A</span></div>
+            <div class="ps-dropdown-item"><span>Lens Correction...</span></div>
+            <div class="ps-dropdown-item"><span>Liquify...</span><span class="ps-shortcut">Ctrl+Shift+X</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Blur</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-item"><span>Distort</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-item"><span>Noise</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-item"><span>Sharpen</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-item"><span>Stylize</span><span class="ps-shortcut">&#9656;</span></div>
+          </div>
+        </div>
+        <div class="ps-menu-item" data-menu="3d">3D
+          <div class="ps-dropdown">
+            <div class="ps-dropdown-item"><span>New 3D Extrusion</span></div>
+            <div class="ps-dropdown-item"><span>New Mesh from Layer</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Render 3D Layer</span><span class="ps-shortcut">Alt+Shift+Ctrl+R</span></div>
+          </div>
+        </div>
+        <div class="ps-menu-item" data-menu="view">View
+          <div class="ps-dropdown">
+            <div class="ps-dropdown-item"><span>Zoom In</span><span class="ps-shortcut">Ctrl++</span></div>
+            <div class="ps-dropdown-item"><span>Zoom Out</span><span class="ps-shortcut">Ctrl+-</span></div>
+            <div class="ps-dropdown-item"><span>Fit on Screen</span><span class="ps-shortcut">Ctrl+0</span></div>
+            <div class="ps-dropdown-item"><span>100%</span><span class="ps-shortcut">Ctrl+1</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Proof Setup</span><span class="ps-shortcut">&#9656;</span></div>
+            <div class="ps-dropdown-item"><span>Proof Colors</span><span class="ps-shortcut">Ctrl+Y</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>Rulers</span><span class="ps-shortcut">Ctrl+R</span></div>
+            <div class="ps-dropdown-item"><span>Show Grid</span><span class="ps-shortcut">Ctrl+'</span></div>
+            <div class="ps-dropdown-item"><span>Show Guides</span><span class="ps-shortcut">Ctrl+;</span></div>
+            <div class="ps-dropdown-item"><span>Snap</span><span class="ps-shortcut">Ctrl+Shift+;</span></div>
+          </div>
+        </div>
+        <div class="ps-menu-item" data-menu="window">Window
+          <div class="ps-dropdown">
+            <div class="ps-dropdown-item"><span>Actions</span><span class="ps-shortcut">Alt+F9</span></div>
+            <div class="ps-dropdown-item"><span>Adjustments</span></div>
+            <div class="ps-dropdown-item"><span>Brush Settings</span><span class="ps-shortcut">F5</span></div>
+            <div class="ps-dropdown-item"><span>Channels</span></div>
+            <div class="ps-dropdown-item"><span>Character</span></div>
+            <div class="ps-dropdown-item"><span>Color</span><span class="ps-shortcut">F6</span></div>
+            <div class="ps-dropdown-item"><span>History</span></div>
+            <div class="ps-dropdown-item"><span>Info</span><span class="ps-shortcut">F8</span></div>
+            <div class="ps-dropdown-item"><span>Layers</span><span class="ps-shortcut">F7</span></div>
+            <div class="ps-dropdown-item"><span>Paths</span></div>
+            <div class="ps-dropdown-item"><span>Properties</span></div>
+            <div class="ps-dropdown-item"><span>Swatches</span></div>
+          </div>
+        </div>
+        <div class="ps-menu-item" data-menu="help">Help
+          <div class="ps-dropdown">
+            <div class="ps-dropdown-item"><span>Photoshop Help...</span><span class="ps-shortcut">F1</span></div>
+            <div class="ps-dropdown-item"><span>About Photoshop...</span></div>
+            <div class="ps-dropdown-sep"></div>
+            <div class="ps-dropdown-item"><span>System Info...</span></div>
+            <div class="ps-dropdown-item"><span>GPU Sniffer Test...</span></div>
+          </div>
+        </div>
         <div class="ps-menu-right">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="0.5" stroke="#aaa" stroke-width="1"/><rect x="8" y="1" width="5" height="5" rx="0.5" stroke="#aaa" stroke-width="1"/><rect x="1" y="8" width="5" height="5" rx="0.5" stroke="#aaa" stroke-width="1"/><rect x="8" y="8" width="5" height="5" rx="0.5" stroke="#aaa" stroke-width="1"/></svg>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#aaa" stroke-width="1"/><path d="M7 4v3l2 2" stroke="#aaa" stroke-width="1" stroke-linecap="round"/></svg>
@@ -2603,135 +2947,19 @@ a { text-decoration: none; color: inherit; }
     <p class="section-desc">Every tool explained with keyboard shortcuts, tips, and difficulty level.</p>
   </div>
 
-  <div class="tabs reveal" id="toolTabs">
-    <button class="tab-btn active" data-tab="all">All</button>
-    <button class="tab-btn" data-tab="selection">Selection</button>
-    <button class="tab-btn" data-tab="retouching">Retouching</button>
-    <button class="tab-btn" data-tab="painting">Painting</button>
-    <button class="tab-btn" data-tab="creation">Creation</button>
-    <button class="tab-btn" data-tab="exposure">Exposure</button>
+  <div class="tools-carousel reveal" id="toolsCarousel">
+    <button class="tools-carousel-arrow" id="toolPrev" onclick="changeCarouselTool(-1)">&#10094;</button>
+    <div class="tools-carousel-card">
+      <img class="tools-carousel-icon" id="carouselIcon" src="" alt="Tool icon">
+      <div class="tools-carousel-name" id="carouselName"></div>
+      <div class="tools-carousel-shortcut" id="carouselShortcut"></div>
+      <div id="carouselLevel"></div>
+      <p class="tools-carousel-desc" id="carouselDesc"></p>
+    </div>
+    <button class="tools-carousel-arrow" id="toolNext" onclick="changeCarouselTool(1)">&#10095;</button>
   </div>
-
-  <div class="tools-grid reveal" id="toolsGrid">
-
-    <div class="tool-card" data-level="beginner" data-cat="selection">
-      <div class="tool-header">
-        <h3>Move Tool</h3>
-        <span class="kbd">V</span>
-      </div>
-      <span class="tool-level level-beginner">Beginner</span>
-      <p>Moves photos and individual layers around the canvas. The foundation of layer-based editing — select it to reposition any element in your composition.</p>
-    </div>
-
-    <div class="tool-card" data-level="beginner" data-cat="selection">
-      <div class="tool-header">
-        <h3>Rectangular Marquee</h3>
-        <span class="kbd">M</span>
-      </div>
-      <span class="tool-level level-beginner">Beginner</span>
-      <p>Draw rectangular or elliptical selections. Hold <strong>Shift</strong> to constrain to a perfect square or circle. Essential for isolating areas of your image.</p>
-    </div>
-
-    <div class="tool-card" data-level="intermediate" data-cat="selection">
-      <div class="tool-header">
-        <h3>Lasso Tool</h3>
-        <span class="kbd">L</span>
-      </div>
-      <span class="tool-level level-intermediate">Intermediate</span>
-      <p>Freehand selection for custom boundaries. Includes polygonal lasso (straight lines) and magnetic lasso (auto-detects edges — ideal for cutting out objects with precision).</p>
-    </div>
-
-    <div class="tool-card" data-level="beginner" data-cat="selection">
-      <div class="tool-header">
-        <h3>Quick Selection</h3>
-        <span class="kbd">W</span>
-      </div>
-      <span class="tool-level level-beginner">Beginner</span>
-      <p>Automatically detects and selects objects as you paint over them. Photoshop's AI analyzes edges and textures to create accurate selections effortlessly.</p>
-    </div>
-
-    <div class="tool-card" data-level="beginner" data-cat="creation">
-      <div class="tool-header">
-        <h3>Crop Tool</h3>
-        <span class="kbd">C</span>
-      </div>
-      <span class="tool-level level-beginner">Beginner</span>
-      <p>Change composition by trimming and straightening. Drag to set your crop area, then use the top toolbar for manual measurements, aspect ratios, or presets.</p>
-    </div>
-
-    <div class="tool-card" data-level="intermediate" data-cat="retouching">
-      <div class="tool-header">
-        <h3>Patch Tool</h3>
-        <span class="kbd">J</span>
-      </div>
-      <span class="tool-level level-intermediate">Intermediate</span>
-      <p>Draw a selection and drag to replace it with a nearby area. Retains detail and texture — ideal for portraits. Includes healing brush and spot-healing brush. Resize with <strong>[</strong> and <strong>]</strong> keys.</p>
-    </div>
-
-    <div class="tool-card" data-level="intermediate" data-cat="painting">
-      <div class="tool-header">
-        <h3>Brush Tool</h3>
-        <span class="kbd">B</span>
-      </div>
-      <span class="tool-level level-intermediate">Intermediate</span>
-      <p>Paint custom colored strokes — essential for layer masks. Right-click to adjust size and hardness. Experiment with blend modes for unique effects. Includes mixer brush and pencil tool.</p>
-    </div>
-
-    <div class="tool-card" data-level="intermediate" data-cat="retouching">
-      <div class="tool-header">
-        <h3>Clone Stamp</h3>
-        <span class="kbd">S</span>
-      </div>
-      <span class="tool-level level-intermediate">Intermediate</span>
-      <p>Hold <strong>Alt/Opt</strong> to set source, then paint over what you want to replace. Creates an airbrushed effect — reduces detail and texture unlike the patch tool.</p>
-    </div>
-
-    <div class="tool-card" data-level="beginner" data-cat="painting">
-      <div class="tool-header">
-        <h3>Eraser Tool</h3>
-        <span class="kbd">E</span>
-      </div>
-      <span class="tool-level level-beginner">Beginner</span>
-      <p>Erase to reveal layers underneath — powerful for juxtaposition composites. Right-click to change size, hardness, and shape. Supports all brush heads for creative erasing.</p>
-    </div>
-
-    <div class="tool-card" data-level="advanced" data-cat="exposure">
-      <div class="tool-header">
-        <h3>Dodge & Burn</h3>
-        <span class="kbd">O</span>
-      </div>
-      <span class="tool-level level-advanced">Advanced</span>
-      <p>Fine-tune exposure using darkroom techniques. Dodge lightens, Burn darkens. Set <strong>Range</strong> (Highlights/Midtones/Shadows) and start <strong>Exposure</strong> at 10–15%. Build up gradually.</p>
-    </div>
-
-    <div class="tool-card" data-level="beginner" data-cat="creation">
-      <div class="tool-header">
-        <h3>Type Tool</h3>
-        <span class="kbd">T</span>
-      </div>
-      <span class="tool-level level-beginner">Beginner</span>
-      <p>Add horizontal or vertical text. Draw your text area, adjust font, weight, size, and color from the options bar. Press the tick icon to confirm. Use Move tool to reposition.</p>
-    </div>
-
-    <div class="tool-card" data-level="beginner" data-cat="creation">
-      <div class="tool-header">
-        <h3>Shapes</h3>
-        <span class="kbd">U</span>
-      </div>
-      <span class="tool-level level-beginner">Beginner</span>
-      <p>Draw preset shapes with customizable fill and outline colors. Includes custom shapes with icons. Create solid blocks, hollow shapes, or download community shape libraries.</p>
-    </div>
-
-    <div class="tool-card" data-level="beginner" data-cat="selection">
-      <div class="tool-header">
-        <h3>Eyedropper</h3>
-        <span class="kbd">I</span>
-      </div>
-      <span class="tool-level level-beginner">Beginner</span>
-      <p>Sample and match any color directly from your image. Click anywhere to pick up that exact color for use with brushes, fills, and text.</p>
-    </div>
-
-  </div>
+  <div class="tools-carousel-counter reveal" id="carouselCounter"></div>
+  <div class="tools-carousel-hint reveal">Use &#8592; &#8594; arrow keys to navigate</div>
 </section>
 
 <!-- INTERACTIVE EXPLORER -->
@@ -2930,33 +3158,42 @@ a { text-decoration: none; color: inherit; }
   <div class="section-inner">
     <div class="reveal" style="text-align:center;">
       <div class="section-label label-violet">Game 3</div>
-      <h2 class="section-title" style="text-align:center;">Find The Tool</h2>
-      <p class="section-desc" style="text-align:center; margin-left:auto; margin-right:auto;">A tool icon spins and stops — can you name the Photoshop tool? Test your toolbar knowledge!</p>
+      <h2 class="section-title" style="text-align:center;">Tools Spinner</h2>
+      <p class="section-desc" style="text-align:center; margin-left:auto; margin-right:auto;">Spin the dice, identify the Photoshop tool, and move to the next! Each tool appears only once per round.</p>
     </div>
     <div class="tc-container reveal" id="toolChallengeApp">
       <div class="tc-box" id="tcBox">
         <div class="tc-screen" id="tcStart">
-          <span class="tc-start-icon">🛠️</span>
-          <h3>The Tool Challenge</h3>
-          <p>A Photoshop tool icon spins and reveals itself. Pick the correct tool name from 4 options.<br>10 rounds &middot; 3 lives &middot; Build your streak!</p>
+          <span class="tc-start-icon">🎲</span>
+          <h3>Spin. Guess. Learn!</h3>
+          <p>Tool icons blink rapidly and slow down to reveal one — identify it!<br>67 tools &middot; No repeats!</p>
           <button class="quiz-btn quiz-btn-primary" onclick="startToolChallenge()">
-            Start Game
+            Spin the Dice
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
         </div>
         <div id="tcGame" hidden>
           <div class="tc-header">
             <div class="tc-round" id="tcRound">Round 1 / 10</div>
-            <div class="tc-lives" id="tcLives">❤️❤️❤️</div>
+            <div class="tc-lives" id="tcLives"></div>
           </div>
+          <div class="tc-progress-dots" id="tcDots"></div>
           <div class="tc-streak" id="tcStreak"></div>
-          <div class="tc-spinner-area">
-            <div class="tc-spinner-ring" id="tcRing"></div>
-            <div class="tc-tool-icon" id="tcIcon"></div>
+          <div class="tc-game-layout">
+            <div class="tc-dice-area">
+              <div class="tc-glow"></div>
+              <div class="tc-tool-display" id="tcToolDisplay">
+                <img id="tcToolImg" src="" alt="Tool">
+              </div>
+              <button class="tc-spin-btn" id="tcSpinBtn" onclick="spinDice()">&#x1F3B2; SPIN</button>
+              <div class="tc-spin-label" id="tcSpinLabel"></div>
+            </div>
+            <div class="tc-answer-panel">
+              <h4>What is this Photoshop tool?</h4>
+              <div class="tc-options" id="tcOptions"></div>
+              <button class="tc-answer-btn" id="tcAnswerBtn" disabled onclick="submitTcAnswer()">Answer</button>
+            </div>
           </div>
-          <div class="tc-prompt">Which tool is this?</div>
-          <div class="tc-options" id="tcOptions"></div>
-          <div class="tc-timer-bar"><div class="tc-timer-fill" id="tcTimerFill"></div></div>
           <div class="tc-feedback" id="tcFeedback"></div>
         </div>
         <div id="tcResult" hidden>
@@ -3203,16 +3440,101 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
 // TOOL TABS
-document.querySelectorAll('#toolTabs .tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('#toolTabs .tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const cat = btn.dataset.tab;
-    document.querySelectorAll('#toolsGrid .tool-card').forEach(card => {
-      card.hidden = cat !== 'all' && card.dataset.cat !== cat;
-    });
-  });
+const CAROUSEL_TOOLS = [
+  { name: 'Move Tool', shortcut: 'V', level: 'beginner', img: 'images/tools/move.png', desc: 'Moves photos and individual layers around the canvas. The foundation of layer-based editing — select it to reposition any element in your composition.' },
+  { name: 'Artboard Tool', shortcut: 'V', level: 'intermediate', img: 'images/tools/artboard.png', desc: 'Create and manage multiple artboards within a single document. Great for designing multi-page layouts, app screens, or responsive web mockups side by side.' },
+  { name: 'Rectangular Marquee', shortcut: 'M', level: 'beginner', img: 'images/tools/rect_marquee.png', desc: 'Draw rectangular selections. Hold <strong>Shift</strong> to constrain to a perfect square. Essential for isolating rectangular areas of your image.' },
+  { name: 'Elliptical Marquee', shortcut: 'M', level: 'beginner', img: 'images/tools/elliptical_marquee.png', desc: 'Draw elliptical or circular selections. Hold <strong>Shift</strong> for a perfect circle. Use with feathering for soft-edged vignettes.' },
+  { name: 'Single Row Marquee', shortcut: 'M', level: 'advanced', img: 'images/tools/single_row_marquee.png', desc: 'Selects a single horizontal row of pixels across the entire canvas. Useful for creating thin line effects or precise pixel-level editing.' },
+  { name: 'Single Column Marquee', shortcut: 'M', level: 'advanced', img: 'images/tools/single_col_marquee.png', desc: 'Selects a single vertical column of pixels across the entire canvas. Used for precision work and creating vertical line effects.' },
+  { name: 'Object Selection', shortcut: 'W', level: 'beginner', img: 'images/tools/object_selection.png', desc: 'AI-powered tool that automatically detects and selects objects. Draw a rough rectangle or lasso around an object and Photoshop refines the selection.' },
+  { name: 'Quick Selection', shortcut: 'W', level: 'beginner', img: 'images/tools/quick_selection.png', desc: 'Automatically detects and selects objects as you paint over them. Photoshop\'s AI analyzes edges and textures to create accurate selections effortlessly.' },
+  { name: 'Magic Wand', shortcut: 'W', level: 'beginner', img: 'images/tools/magic_wand.png', desc: 'Selects pixels of similar color with a single click. Adjust <strong>Tolerance</strong> to control how similar colors must be. Great for solid-color backgrounds.' },
+  { name: 'Lasso Tool', shortcut: 'L', level: 'intermediate', img: 'images/tools/lasso.png', desc: 'Freehand selection for custom boundaries. Click and drag to draw any shape. Release to close the selection automatically.' },
+  { name: 'Polygonal Lasso', shortcut: 'L', level: 'intermediate', img: 'images/tools/polygonal_lasso.png', desc: 'Click point-to-point to create straight-line selection segments. Double-click to close. Perfect for selecting objects with straight edges.' },
+  { name: 'Magnetic Lasso', shortcut: 'L', level: 'intermediate', img: 'images/tools/magnetic_lasso.png', desc: 'Automatically snaps to edges as you trace along them. Detects contrast between foreground and background — ideal for cutting out objects with defined outlines.' },
+  { name: 'Crop Tool', shortcut: 'C', level: 'beginner', img: 'images/tools/crop.png', desc: 'Change composition by trimming and straightening. Drag to set your crop area, then use the top toolbar for aspect ratios or presets.' },
+  { name: 'Perspective Crop', shortcut: 'C', level: 'advanced', img: 'images/tools/perspective_crop.png', desc: 'Crop and correct perspective distortion in one step. Draw a quadrilateral matching the perspective, and Photoshop straightens and crops simultaneously.' },
+  { name: 'Slice Tool', shortcut: 'C', level: 'advanced', img: 'images/tools/slice.png', desc: 'Divide an image into smaller sections for web export. Each slice can be saved as a separate file with individual optimization settings.' },
+  { name: 'Slice Select', shortcut: 'C', level: 'advanced', img: 'images/tools/slice_select.png', desc: 'Select, move, and resize existing slices. Double-click a slice to set its name, URL link, and export options for web workflows.' },
+  { name: 'Frame Tool', shortcut: 'K', level: 'intermediate', img: 'images/tools/frame.png', desc: 'Create placeholder frames for images. Drag images into frames for automatic masking — streamlines layout work for mockups and templates.' },
+  { name: 'Eyedropper', shortcut: 'I', level: 'beginner', img: 'images/tools/eyedropper.png', desc: 'Sample and match any color directly from your image. Click anywhere to pick up that exact color for use with brushes, fills, and text.' },
+  { name: 'Color Sampler', shortcut: 'I', level: 'intermediate', img: 'images/tools/color_sampler.png', desc: 'Place up to four sample points on your image to monitor color values in the Info panel. Essential for precise color correction workflows.' },
+  { name: 'Ruler Tool', shortcut: 'I', level: 'intermediate', img: 'images/tools/ruler.png', desc: 'Measure distances, angles, and positions on your canvas. Draw a line between two points to see exact measurements in the options bar.' },
+  { name: 'Note Tool', shortcut: 'I', level: 'intermediate', img: 'images/tools/note.png', desc: 'Add text annotations to your document without affecting the image. Notes are saved with the file — great for collaboration and revision tracking.' },
+  { name: 'Count Tool', shortcut: 'I', level: 'advanced', img: 'images/tools/count.png', desc: 'Manually count objects in an image by clicking on them. Each click adds a numbered marker. Useful for scientific and inventory workflows.' },
+  { name: 'Spot Healing Brush', shortcut: 'J', level: 'beginner', img: 'images/tools/spot_healing.png', desc: 'Instantly remove blemishes, dust, and small imperfections. Just paint over the flaw and Photoshop automatically samples and blends surrounding pixels.' },
+  { name: 'Healing Brush', shortcut: 'J', level: 'intermediate', img: 'images/tools/healing_brush.png', desc: 'Hold <strong>Alt/Opt</strong> to sample a source area, then paint over flaws. Blends texture, lighting, and shading from the source for seamless retouching.' },
+  { name: 'Patch Tool', shortcut: 'J', level: 'intermediate', img: 'images/tools/patch.png', desc: 'Draw a selection and drag to replace it with a nearby area. Retains detail and texture — ideal for portraits and large-area retouching.' },
+  { name: 'Content-Aware Move', shortcut: 'J', level: 'advanced', img: 'images/tools/content_aware_move.png', desc: 'Select an object, drag it to a new position, and Photoshop fills the original spot and blends the moved object into its new location.' },
+  { name: 'Red Eye Tool', shortcut: 'J', level: 'beginner', img: 'images/tools/red_eye.png', desc: 'Remove red-eye caused by camera flash. Click on the red pupil and Photoshop replaces it with a natural dark tone automatically.' },
+  { name: 'Brush Tool', shortcut: 'B', level: 'intermediate', img: 'images/tools/brush.png', desc: 'Paint custom colored strokes — essential for layer masks. Right-click to adjust size and hardness. Experiment with blend modes for unique effects.' },
+  { name: 'Pencil Tool', shortcut: 'B', level: 'beginner', img: 'images/tools/pencil.png', desc: 'Draw hard-edged freeform lines. Unlike the brush, the pencil has no anti-aliasing — every pixel is fully opaque. Great for pixel art.' },
+  { name: 'Color Replacement', shortcut: 'B', level: 'intermediate', img: 'images/tools/color_replacement.png', desc: 'Paint over a color to replace it with the foreground color while preserving texture and shading. Useful for changing the color of specific objects.' },
+  { name: 'Mixer Brush', shortcut: 'B', level: 'advanced', img: 'images/tools/mixer_brush.png', desc: 'Simulates realistic paint mixing. Blends colors on the canvas like wet paint — adjust wetness, load, and mix settings for oil-painting effects.' },
+  { name: 'Clone Stamp', shortcut: 'S', level: 'intermediate', img: 'images/tools/clone_stamp.png', desc: 'Hold <strong>Alt/Opt</strong> to set source, then paint over what you want to replace. Copies pixels exactly from the source point.' },
+  { name: 'Pattern Stamp', shortcut: 'S', level: 'intermediate', img: 'images/tools/pattern_stamp.png', desc: 'Paint with a predefined pattern instead of sampled pixels. Choose from built-in patterns or create custom ones for textures and backgrounds.' },
+  { name: 'History Brush', shortcut: 'Y', level: 'intermediate', img: 'images/tools/history_brush.png', desc: 'Paint back to a previous state from the History panel. Selectively restore parts of your image to an earlier version while keeping other edits.' },
+  { name: 'Art History Brush', shortcut: 'Y', level: 'advanced', img: 'images/tools/art_history_brush.png', desc: 'Paint stylized strokes based on a history state. Creates impressionistic, painterly effects by interpreting the image data with artistic brush styles.' },
+  { name: 'Eraser Tool', shortcut: 'E', level: 'beginner', img: 'images/tools/eraser.png', desc: 'Erase to reveal layers underneath — powerful for juxtaposition composites. Right-click to change size, hardness, and shape.' },
+  { name: 'Background Eraser', shortcut: 'E', level: 'intermediate', img: 'images/tools/bg_eraser.png', desc: 'Erases the background while preserving edges of foreground objects. Samples the color under the crosshair and erases similar pixels as you drag.' },
+  { name: 'Magic Eraser', shortcut: 'E', level: 'beginner', img: 'images/tools/magic_eraser.png', desc: 'Click to erase all similar-colored pixels at once, like a combination of Magic Wand + Delete. Adjust tolerance for broader or narrower color matching.' },
+  { name: 'Gradient Tool', shortcut: 'G', level: 'beginner', img: 'images/tools/gradient.png', desc: 'Create smooth color transitions. Choose from linear, radial, angle, reflected, or diamond gradients. Essential for backgrounds, masks, and lighting effects.' },
+  { name: 'Paint Bucket', shortcut: 'G', level: 'beginner', img: 'images/tools/paint_bucket.png', desc: 'Fill areas of similar color with the foreground color or a pattern. Adjust tolerance to control how much of the area gets filled.' },
+  { name: 'Blur Tool', shortcut: 'R', level: 'beginner', img: 'images/tools/blur.png', desc: 'Soften edges and reduce detail by painting. Lower the strength for subtle smoothing. Useful for depth-of-field effects on specific areas.' },
+  { name: 'Sharpen Tool', shortcut: 'R', level: 'intermediate', img: 'images/tools/sharpen.png', desc: 'Increase contrast along edges to enhance detail. Paint over areas to make them crisper. Use at low strength to avoid artifacts.' },
+  { name: 'Smudge Tool', shortcut: 'R', level: 'intermediate', img: 'images/tools/smudge.png', desc: 'Push and blend pixels as if dragging a finger through wet paint. Great for blending edges, creating streaks, or artistic distortion effects.' },
+  { name: 'Dodge Tool', shortcut: 'O', level: 'advanced', img: 'images/tools/dodge.png', desc: 'Lighten specific areas using darkroom technique. Set <strong>Range</strong> to Highlights, Midtones, or Shadows and start <strong>Exposure</strong> at 10–15%. Build up gradually.' },
+  { name: 'Burn Tool', shortcut: 'O', level: 'advanced', img: 'images/tools/burn.png', desc: 'Darken specific areas using darkroom technique. Combined with Dodge, it gives you precise local exposure control for dramatic lighting effects.' },
+  { name: 'Sponge Tool', shortcut: 'O', level: 'intermediate', img: 'images/tools/sponge.png', desc: 'Increase or decrease color saturation by painting. Set mode to Saturate or Desaturate. Perfect for making specific colors pop or muting distractions.' },
+  { name: 'Pen Tool', shortcut: 'P', level: 'advanced', img: 'images/tools/pen.png', desc: 'Create precise vector paths using anchor points and curves. The most accurate selection tool — essential for clean cutouts and shape creation.' },
+  { name: 'Freeform Pen', shortcut: 'P', level: 'intermediate', img: 'images/tools/freeform_pen.png', desc: 'Draw paths freehand like the lasso tool, but creates editable vector paths. Good for quick organic shapes that you can refine later.' },
+  { name: 'Curvature Pen', shortcut: 'P', level: 'intermediate', img: 'images/tools/curvature_pen.png', desc: 'Simplified pen tool — just click to add points and Photoshop automatically creates smooth curves between them. Easier than the standard Pen Tool.' },
+  { name: 'Add Anchor Point', shortcut: 'P', level: 'advanced', img: 'images/tools/add_anchor.png', desc: 'Add new anchor points to an existing path. Click anywhere on a path segment to insert a point for more precise control over curves.' },
+  { name: 'Delete Anchor Point', shortcut: 'P', level: 'advanced', img: 'images/tools/delete_anchor.png', desc: 'Remove unnecessary anchor points from a path to simplify it. Click on an existing anchor point to delete it while keeping the path connected.' },
+  { name: 'Convert Point', shortcut: 'P', level: 'advanced', img: 'images/tools/convert_point.png', desc: 'Toggle anchor points between smooth curves and sharp corners. Click a smooth point to make it a corner, or drag a corner point to create curves.' },
+  { name: 'Horizontal Type', shortcut: 'T', level: 'beginner', img: 'images/tools/horizontal_type.png', desc: 'Add horizontal text. Click for a single line or drag to create a text box. Use the Character panel for font, size, spacing, and color.' },
+  { name: 'Vertical Type', shortcut: 'T', level: 'beginner', img: 'images/tools/vertical_type.png', desc: 'Add vertical text that flows top-to-bottom. Great for Asian typography, creative layouts, and sidebar designs.' },
+  { name: 'Vertical Type Mask', shortcut: 'T', level: 'advanced', img: 'images/tools/vertical_type_mask.png', desc: 'Creates a vertical text-shaped selection instead of actual text. Use it to fill text shapes with images or create text-based masks.' },
+  { name: 'Horizontal Type Mask', shortcut: 'T', level: 'advanced', img: 'images/tools/horizontal_type_mask.png', desc: 'Creates a horizontal text-shaped selection. Type your text and it becomes a selection — fill with gradients, patterns, or images for creative effects.' },
+  { name: 'Path Selection', shortcut: 'A', level: 'intermediate', img: 'images/tools/path_selection.png', desc: 'Select and move entire paths or shapes. Click on a path to select it, then drag to reposition. Works with pen tool paths and shape layers.' },
+  { name: 'Direct Selection', shortcut: 'A', level: 'intermediate', img: 'images/tools/direct_selection.png', desc: 'Select and move individual anchor points and direction handles. Fine-tune path shapes by adjusting specific points without affecting the rest.' },
+  { name: 'Rectangle Tool', shortcut: 'U', level: 'beginner', img: 'images/tools/rectangle.png', desc: 'Draw rectangle shapes with customizable fill and stroke. Hold <strong>Shift</strong> for perfect squares. Creates vector shape layers by default.' },
+  { name: 'Rounded Rectangle', shortcut: 'U', level: 'beginner', img: 'images/tools/rounded_rectangle.png', desc: 'Draw rectangles with rounded corners. Adjust the corner radius in the options bar. Popular for buttons, cards, and UI elements.' },
+  { name: 'Ellipse Tool', shortcut: 'U', level: 'beginner', img: 'images/tools/ellipse.png', desc: 'Draw ellipses and circles. Hold <strong>Shift</strong> for a perfect circle. Use for badges, avatars, decorative elements, and circular masks.' },
+  { name: 'Polygon Tool', shortcut: 'U', level: 'beginner', img: 'images/tools/polygon.png', desc: 'Draw regular polygons with a configurable number of sides. Set the number of sides in the options bar — from triangles to complex star shapes.' },
+  { name: 'Line Tool', shortcut: 'U', level: 'beginner', img: 'images/tools/line.png', desc: 'Draw straight lines with adjustable weight, color, and arrowheads. Hold <strong>Shift</strong> to constrain to 45-degree angles.' },
+  { name: 'Custom Shape', shortcut: 'U', level: 'beginner', img: 'images/tools/custom_shape.png', desc: 'Draw preset shapes from a library — arrows, symbols, frames, and more. Load additional shape packs or create your own custom shapes.' },
+  { name: 'Hand Tool', shortcut: 'H', level: 'beginner', img: 'images/tools/hand.png', desc: 'Pan around your canvas when zoomed in. Hold <strong>Space</strong> to temporarily switch to the Hand Tool from any other tool.' },
+  { name: 'Rotate View', shortcut: 'R', level: 'beginner', img: 'images/tools/rotate_view.png', desc: 'Rotate the canvas view without rotating the actual image. Helps when drawing or retouching at awkward angles. Press Esc to reset.' },
+  { name: 'Zoom Tool', shortcut: 'Z', level: 'beginner', img: 'images/tools/zoom.png', desc: 'Zoom in and out of your canvas. Click to zoom in, hold <strong>Alt/Opt</strong> and click to zoom out. Use <strong>Ctrl/Cmd + 0</strong> to fit to screen.' },
+];
+let carouselIdx = 0;
+function showCarouselTool() {
+  const t = CAROUSEL_TOOLS[carouselIdx];
+  document.getElementById('carouselIcon').src = t.img;
+  document.getElementById('carouselIcon').alt = t.name;
+  document.getElementById('carouselName').textContent = t.name;
+  document.getElementById('carouselShortcut').innerHTML = 'Shortcut: <span class="kbd">' + t.shortcut + '</span>';
+  const lvlMap = { beginner: ['Beginner','level-beginner'], intermediate: ['Intermediate','level-intermediate'], advanced: ['Advanced','level-advanced'] };
+  const [lvlText, lvlClass] = lvlMap[t.level];
+  document.getElementById('carouselLevel').innerHTML = '<span class="tool-level ' + lvlClass + '">' + lvlText + '</span>';
+  document.getElementById('carouselDesc').innerHTML = t.desc;
+  document.getElementById('carouselCounter').textContent = (carouselIdx + 1) + ' / ' + CAROUSEL_TOOLS.length;
+}
+function changeCarouselTool(dir) {
+  carouselIdx = (carouselIdx + dir + CAROUSEL_TOOLS.length) % CAROUSEL_TOOLS.length;
+  showCarouselTool();
+}
+document.addEventListener('keydown', (e) => {
+  const carousel = document.getElementById('toolsCarousel');
+  if (!carousel) return;
+  const rect = carousel.getBoundingClientRect();
+  if (rect.top > window.innerHeight || rect.bottom < 0) return;
+  if (e.key === 'ArrowLeft') { changeCarouselTool(-1); e.preventDefault(); }
+  if (e.key === 'ArrowRight') { changeCarouselTool(1); e.preventDefault(); }
 });
+showCarouselTool();
 
 // TOOL EXPLORER
 document.querySelectorAll('.explorer-btn').forEach(btn => {
@@ -3318,26 +3640,26 @@ if (photoCard && photoWrap) {
 
 // ─── GAME 1: TRUST MY MEASURE ───
 const TM_QUESTIONS = [
-  { q: 'How many pixels are in 1 inch at 72 PPI?', options: ['72 px', '96 px', '100 px', '64 px'], answer: '72 px' },
-  { q: 'What is the A4 paper size in millimeters?', options: ['210 × 297 mm', '216 × 279 mm', '200 × 300 mm', '220 × 310 mm'], answer: '210 × 297 mm' },
-  { q: 'What is the standard web resolution?', options: ['72 PPI', '150 PPI', '300 PPI', '96 PPI'], answer: '72 PPI' },
-  { q: 'What is the standard print resolution?', options: ['300 DPI', '72 DPI', '150 DPI', '600 DPI'], answer: '300 DPI' },
-  { q: 'What is 1 inch equal to in centimeters?', options: ['2.54 cm', '2.00 cm', '3.14 cm', '1.72 cm'], answer: '2.54 cm' },
-  { q: 'Full HD resolution is?', options: ['1920 × 1080 px', '1280 × 720 px', '2560 × 1440 px', '1600 × 900 px'], answer: '1920 × 1080 px' },
-  { q: 'What is the Letter paper size (US) in inches?', options: ['8.5 × 11 in', '8 × 10 in', '8.5 × 14 in', '7.5 × 10 in'], answer: '8.5 × 11 in' },
-  { q: 'How many pixels in 1 inch at 300 PPI?', options: ['300 px', '72 px', '150 px', '256 px'], answer: '300 px' },
-  { q: '4K UHD resolution is?', options: ['3840 × 2160 px', '4096 × 2160 px', '2560 × 1440 px', '3200 × 1800 px'], answer: '3840 × 2160 px' },
-  { q: 'What is the Instagram square post size?', options: ['1080 × 1080 px', '1024 × 1024 px', '800 × 800 px', '1200 × 1200 px'], answer: '1080 × 1080 px' },
-  { q: '1 point (pt) in typography equals?', options: ['1/72 inch', '1/96 inch', '1/64 inch', '1/100 inch'], answer: '1/72 inch' },
-  { q: 'What is the A3 paper size in mm?', options: ['297 × 420 mm', '210 × 297 mm', '320 × 450 mm', '250 × 350 mm'], answer: '297 × 420 mm' },
-  { q: 'Facebook cover photo dimensions?', options: ['820 × 312 px', '1200 × 630 px', '1080 × 1080 px', '900 × 300 px'], answer: '820 × 312 px' },
-  { q: 'How many points in 1 inch?', options: ['72 pt', '96 pt', '64 pt', '100 pt'], answer: '72 pt' },
-  { q: 'What is the minimum DPI for newspaper print?', options: ['150 DPI', '72 DPI', '300 DPI', '200 DPI'], answer: '150 DPI' },
-  { q: 'YouTube thumbnail recommended size?', options: ['1280 × 720 px', '1920 × 1080 px', '800 × 600 px', '1024 × 576 px'], answer: '1280 × 720 px' },
-  { q: 'What is 1 pica equal to?', options: ['12 points', '6 points', '10 points', '8 points'], answer: '12 points' },
-  { q: 'Standard business card size (inches)?', options: ['3.5 × 2 in', '4 × 2.5 in', '3 × 1.5 in', '3.25 × 1.75 in'], answer: '3.5 × 2 in' },
-  { q: 'What PPI does Windows use as default screen resolution?', options: ['96 PPI', '72 PPI', '120 PPI', '144 PPI'], answer: '96 PPI' },
-  { q: 'What is the A5 paper size in mm?', options: ['148 × 210 mm', '105 × 148 mm', '176 × 250 mm', '210 × 297 mm'], answer: '148 × 210 mm' },
+  { q: 'A 32-inch TV is Full HD. What Photoshop canvas size matches it?', options: ['1920 × 1080 px', '1280 × 720 px', '2560 × 1440 px', '1600 × 900 px'], answer: '1920 × 1080 px' },
+  { q: 'A monitor is 80 cm wide. Approximately how many inches is it?', options: ['31.5 inches', '28 inches', '35 inches', '24 inches'], answer: '31.5 inches' },
+  { q: 'What canvas size should you use for an Instagram square post?', options: ['1080 × 1080 px', '1024 × 1024 px', '800 × 800 px', '1200 × 1200 px'], answer: '1080 × 1080 px' },
+  { q: 'What is the correct Photoshop size for a YouTube thumbnail?', options: ['1280 × 720 px', '1920 × 1080 px', '800 × 600 px', '1024 × 576 px'], answer: '1280 × 720 px' },
+  { q: 'What is the standard passport-size photo measurement?', options: ['35 × 45 mm', '40 × 50 mm', '30 × 40 mm', '25 × 35 mm'], answer: '35 × 45 mm' },
+  { q: 'Which DPI is best for printing: 72 DPI or 300 DPI?', options: ['300 DPI', '72 DPI', '150 DPI', '96 DPI'], answer: '300 DPI' },
+  { q: 'What Photoshop canvas size is used for an A4 poster at 300 DPI?', options: ['2480 × 3508 px', '2100 × 2970 px', '3000 × 4000 px', '1800 × 2400 px'], answer: '2480 × 3508 px' },
+  { q: 'An image is 1080 × 1920 pixels. Where is it commonly used?', options: ['Instagram Story / Reels', 'YouTube Thumbnail', 'Facebook Cover', 'Twitter Header'], answer: 'Instagram Story / Reels' },
+  { q: 'What is the Photoshop size for a YouTube channel banner?', options: ['2560 × 1440 px', '1920 × 1080 px', '2048 × 1152 px', '1280 × 720 px'], answer: '2560 × 1440 px' },
+  { q: 'Which file format supports a transparent background for logos?', options: ['PNG', 'JPEG', 'BMP', 'TIFF'], answer: 'PNG' },
+  { q: 'A photo is 6000 × 4000 pixels. What is its aspect ratio?', options: ['3:2', '4:3', '16:9', '2:1'], answer: '3:2' },
+  { q: 'What is the canvas size for an Instagram portrait post?', options: ['1080 × 1350 px', '1080 × 1080 px', '1080 × 1920 px', '1200 × 1500 px'], answer: '1080 × 1350 px' },
+  { q: 'What does 1 pixel mean in Photoshop?', options: ['Smallest unit of a digital image', 'A color value', 'A layer type', 'A brush size'], answer: 'Smallest unit of a digital image' },
+  { q: 'A banner is 6 ft × 3 ft at 150 DPI. What canvas size do you need?', options: ['10800 × 5400 px', '9000 × 4500 px', '7200 × 3600 px', '12000 × 6000 px'], answer: '10800 × 5400 px' },
+  { q: 'What is the difference between Canvas Size and Image Size?', options: ['Canvas changes workspace, Image resizes the photo', 'They are the same thing', 'Canvas changes resolution only', 'Image changes workspace only'], answer: 'Canvas changes workspace, Image resizes the photo' },
+  { q: 'What aspect ratio is used for a square design?', options: ['1:1', '4:3', '16:9', '3:2'], answer: '1:1' },
+  { q: 'What aspect ratio is used for landscape videos and TV screens?', options: ['16:9', '4:3', '1:1', '21:9'], answer: '16:9' },
+  { q: 'What aspect ratio is used for mobile stories and reels?', options: ['9:16', '16:9', '1:1', '4:5'], answer: '9:16' },
+  { q: 'If you double the width and height of a 1080 × 1080 image, what is the new size?', options: ['2160 × 2160 px', '1620 × 1620 px', '3240 × 3240 px', '1440 × 1440 px'], answer: '2160 × 2160 px' },
+  { q: 'Before creating any Photoshop document, what three settings should you check?', options: ['Width, Height & Resolution', 'Color, Filter & Layer', 'Brush, Pen & Eraser', 'Zoom, Rotate & Crop'], answer: 'Width, Height & Resolution' },
 ];
 
 let tmState = { current: 0, score: 0, timer: null, timeLeft: 15, answered: false };
@@ -3690,41 +4012,101 @@ function launchConfetti() {
 
 // ─── TOOL CHALLENGE GAME ───
 const TC_TOOLS = [
-  { name: 'Move Tool', shortcut: 'V', svg: '<svg viewBox="0 0 72 72" fill="none"><path d="M36 8l-10 14h7v10H23V25L9 36l14 10v-7h10v10h-7l10 14 10-14h-7V39h10v7l14-10-14-11v7H43V22h7L36 8z" fill="#C8C8C8" stroke="#444" stroke-width="1.5"/></svg>' },
-  { name: 'Marquee Tool', shortcut: 'M', svg: '<svg viewBox="0 0 72 72" fill="none"><rect x="12" y="16" width="48" height="40" rx="1" stroke="#C8C8C8" stroke-width="2.5" stroke-dasharray="5 4"/><rect x="12" y="16" width="48" height="40" rx="1" stroke="#444" stroke-width="1" stroke-dasharray="5 4" stroke-dashoffset="4.5"/></svg>' },
-  { name: 'Lasso Tool', shortcut: 'L', svg: '<svg viewBox="0 0 72 72" fill="none"><path d="M38 14c14 2 22 12 20 24s-14 20-28 18S6 44 8 32c1.5-9 8-16 16-18" stroke="#C8C8C8" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="48" r="5" stroke="#C8C8C8" stroke-width="2.5"/><path d="M22 53l-4 10" stroke="#C8C8C8" stroke-width="2.5" stroke-linecap="round"/></svg>' },
-  { name: 'Quick Selection', shortcut: 'W', svg: '<svg viewBox="0 0 72 72" fill="none"><circle cx="30" cy="28" r="14" stroke="#C8C8C8" stroke-width="2.5" stroke-dasharray="4 3.5"/><path d="M40 16l4-4M44 12l-2 6M44 12l6-2" stroke="#C8C8C8" stroke-width="2" stroke-linecap="round"/><path d="M38 40l-2 20" stroke="#C8C8C8" stroke-width="3" stroke-linecap="round"/><ellipse cx="36" cy="62" rx="6" ry="3" fill="#C8C8C8" opacity="0.3"/></svg>' },
-  { name: 'Crop Tool', shortcut: 'C', svg: '<svg viewBox="0 0 72 72" fill="none"><path d="M18 6v50h50" stroke="#C8C8C8" stroke-width="3" stroke-linecap="round"/><path d="M4 18h50v50" stroke="#C8C8C8" stroke-width="3" stroke-linecap="round"/></svg>' },
-  { name: 'Eyedropper', shortcut: 'I', svg: '<svg viewBox="0 0 72 72" fill="none"><path d="M54 10l8 8-4 4-8-8" stroke="#C8C8C8" stroke-width="2.5" stroke-linejoin="round"/><rect x="28" y="24" width="16" height="32" rx="2" transform="rotate(-45 36 40)" stroke="#C8C8C8" stroke-width="2.5"/><path d="M20 52l-6 6-2 6 6-2 6-6" stroke="#C8C8C8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="64" r="2" fill="#C8C8C8" opacity="0.4"/></svg>' },
-  { name: 'Healing Brush', shortcut: 'J', svg: '<svg viewBox="0 0 72 72" fill="none"><rect x="18" y="18" width="36" height="36" rx="8" transform="rotate(45 36 36)" stroke="#C8C8C8" stroke-width="2.5"/><path d="M36 24v24M24 36h24" stroke="#C8C8C8" stroke-width="3" stroke-linecap="round"/></svg>' },
-  { name: 'Brush Tool', shortcut: 'B', svg: '<svg viewBox="0 0 72 72" fill="none"><path d="M52 8L28 42c-1 2-1 4 0 5l0 0c1 2 3 2 5 1L62 16" stroke="#C8C8C8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M28 42c-3 4-8 10-10 14-2 3 0 6 3 6 4 0 8-2 12-6" stroke="#C8C8C8" stroke-width="2.5" stroke-linecap="round"/><circle cx="21" cy="60" r="3" fill="#C8C8C8" opacity="0.3"/></svg>' },
-  { name: 'Clone Stamp', shortcut: 'S', svg: '<svg viewBox="0 0 72 72" fill="none"><circle cx="36" cy="24" r="12" stroke="#C8C8C8" stroke-width="2.5"/><path d="M32 24l4 4 4-4" stroke="#C8C8C8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 36v10" stroke="#C8C8C8" stroke-width="3" stroke-linecap="round"/><path d="M24 54h24c2 0 3 1 3 3v2H21v-2c0-2 1-3 3-3z" stroke="#C8C8C8" stroke-width="2.5" stroke-linejoin="round"/><path d="M28 46h16v8H28z" stroke="#C8C8C8" stroke-width="2" stroke-linejoin="round"/></svg>' },
-  { name: 'Eraser Tool', shortcut: 'E', svg: '<svg viewBox="0 0 72 72" fill="none"><path d="M50 14L22 42l-6 6c-2 2-2 5 0 7l4 4c2 2 5 2 7 0l6-6L61 25c2-2 2-5 0-7l-4-4c-2-2-5-2-7 0z" stroke="#C8C8C8" stroke-width="2.5" stroke-linejoin="round"/><path d="M22 42l17-17" stroke="#C8C8C8" stroke-width="2" stroke-dasharray="3 3"/><path d="M14 62h44" stroke="#C8C8C8" stroke-width="2.5" stroke-linecap="round"/></svg>' },
-  { name: 'Gradient Tool', shortcut: 'G', svg: '<svg viewBox="0 0 72 72" fill="none"><rect x="14" y="20" width="44" height="32" rx="3" stroke="#C8C8C8" stroke-width="2.5"/><defs><linearGradient id="grd" x1="18" y1="36" x2="54" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#222"/><stop offset="1" stop-color="#CCC"/></linearGradient></defs><rect x="18" y="24" width="36" height="24" rx="1" fill="url(#grd)"/></svg>' },
-  { name: 'Dodge Tool', shortcut: 'O', svg: '<svg viewBox="0 0 72 72" fill="none"><circle cx="36" cy="22" r="12" stroke="#C8C8C8" stroke-width="2.5" fill="none"/><path d="M36 34v26" stroke="#C8C8C8" stroke-width="3" stroke-linecap="round"/><circle cx="36" cy="22" r="5" fill="#C8C8C8" opacity="0.15"/></svg>' },
-  { name: 'Pen Tool', shortcut: 'P', svg: '<svg viewBox="0 0 72 72" fill="none"><path d="M36 8l-8 44 6-10h4l6 10L36 8z" stroke="#C8C8C8" stroke-width="2.5" stroke-linejoin="round"/><path d="M28 52l-4 8h24l-4-8" stroke="#C8C8C8" stroke-width="2.5" stroke-linejoin="round"/><circle cx="36" cy="14" r="2" fill="#C8C8C8"/></svg>' },
-  { name: 'Type Tool', shortcut: 'T', svg: '<svg viewBox="0 0 72 72" fill="none"><path d="M16 16h40v8" stroke="#C8C8C8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 16v8" stroke="#C8C8C8" stroke-width="3.5" stroke-linecap="round"/><path d="M36 16v40" stroke="#C8C8C8" stroke-width="3.5" stroke-linecap="round"/><path d="M28 56h16" stroke="#C8C8C8" stroke-width="3.5" stroke-linecap="round"/></svg>' },
-  { name: 'Hand Tool', shortcut: 'H', svg: '<svg viewBox="0 0 72 72" fill="none"><path d="M36 12v28M28 18v24M44 18v24M20 26v18c0 10 6 18 16 18s16-8 16-18V26" stroke="#C8C8C8" stroke-width="2.5" stroke-linecap="round"/><path d="M52 26v-4c0-2-2-4-4-4M20 26v-4c0-2 2-4 4-4" stroke="#C8C8C8" stroke-width="2.5" stroke-linecap="round"/></svg>' },
-  { name: 'Zoom Tool', shortcut: 'Z', svg: '<svg viewBox="0 0 72 72" fill="none"><circle cx="30" cy="30" r="16" stroke="#C8C8C8" stroke-width="3"/><path d="M42 42l18 18" stroke="#C8C8C8" stroke-width="3.5" stroke-linecap="round"/><path d="M22 30h16M30 22v16" stroke="#C8C8C8" stroke-width="2.5" stroke-linecap="round"/></svg>' },
-  { name: 'Blur Tool', shortcut: 'R', svg: '<svg viewBox="0 0 72 72" fill="none"><circle cx="36" cy="28" r="14" stroke="#C8C8C8" stroke-width="2.5" opacity="0.4"/><circle cx="36" cy="28" r="10" stroke="#C8C8C8" stroke-width="2" opacity="0.6"/><circle cx="36" cy="28" r="6" stroke="#C8C8C8" stroke-width="1.5" opacity="0.8"/><path d="M36 42v16" stroke="#C8C8C8" stroke-width="3" stroke-linecap="round"/><path d="M28 62h16" stroke="#C8C8C8" stroke-width="2.5" stroke-linecap="round"/></svg>' },
-  { name: 'Shape Tool', shortcut: 'U', svg: '<svg viewBox="0 0 72 72" fill="none"><rect x="12" y="30" width="22" height="22" rx="2" stroke="#C8C8C8" stroke-width="2.5"/><circle cx="50" cy="26" r="11" stroke="#C8C8C8" stroke-width="2.5"/><polygon points="36,10 42,22 30,22" stroke="#C8C8C8" stroke-width="2.5" fill="none" stroke-linejoin="round"/></svg>' },
-  { name: 'Paint Bucket', shortcut: 'G', svg: '<svg viewBox="0 0 72 72" fill="none"><path d="M18 38l18-18 18 18c0 10-8 18-18 18S18 48 18 38z" stroke="#C8C8C8" stroke-width="2.5" stroke-linejoin="round"/><path d="M36 20L20 36" stroke="#C8C8C8" stroke-width="2" stroke-linecap="round"/><path d="M54 48c2 4 4 8 2 10s-6 0-4-6" stroke="#C8C8C8" stroke-width="2" stroke-linecap="round"/></svg>' },
-  { name: 'Sponge Tool', shortcut: 'O', svg: '<svg viewBox="0 0 72 72" fill="none"><rect x="24" y="10" width="24" height="18" rx="4" stroke="#C8C8C8" stroke-width="2.5"/><path d="M30 14v10M36 14v10M42 14v10" stroke="#C8C8C8" stroke-width="1.5" stroke-linecap="round"/><path d="M36 28v30" stroke="#C8C8C8" stroke-width="3" stroke-linecap="round"/><path d="M28 62h16" stroke="#C8C8C8" stroke-width="2.5" stroke-linecap="round"/></svg>' },
+  { name: 'Move Tool', shortcut: 'V', img: 'images/tools/move.png' },
+  { name: 'Artboard Tool', shortcut: 'V', img: 'images/tools/artboard.png' },
+  { name: 'Rectangular Marquee', shortcut: 'M', img: 'images/tools/rect_marquee.png' },
+  { name: 'Elliptical Marquee', shortcut: 'M', img: 'images/tools/elliptical_marquee.png' },
+  { name: 'Single Row Marquee', shortcut: 'M', img: 'images/tools/single_row_marquee.png' },
+  { name: 'Single Column Marquee', shortcut: 'M', img: 'images/tools/single_col_marquee.png' },
+  { name: 'Object Selection', shortcut: 'W', img: 'images/tools/object_selection.png' },
+  { name: 'Quick Selection', shortcut: 'W', img: 'images/tools/quick_selection.png' },
+  { name: 'Magic Wand', shortcut: 'W', img: 'images/tools/magic_wand.png' },
+  { name: 'Lasso Tool', shortcut: 'L', img: 'images/tools/lasso.png' },
+  { name: 'Polygonal Lasso', shortcut: 'L', img: 'images/tools/polygonal_lasso.png' },
+  { name: 'Magnetic Lasso', shortcut: 'L', img: 'images/tools/magnetic_lasso.png' },
+  { name: 'Crop Tool', shortcut: 'C', img: 'images/tools/crop.png' },
+  { name: 'Perspective Crop', shortcut: 'C', img: 'images/tools/perspective_crop.png' },
+  { name: 'Slice Tool', shortcut: 'C', img: 'images/tools/slice.png' },
+  { name: 'Slice Select', shortcut: 'C', img: 'images/tools/slice_select.png' },
+  { name: 'Frame Tool', shortcut: 'K', img: 'images/tools/frame.png' },
+  { name: 'Eyedropper', shortcut: 'I', img: 'images/tools/eyedropper.png' },
+  { name: 'Color Sampler', shortcut: 'I', img: 'images/tools/color_sampler.png' },
+  { name: 'Ruler Tool', shortcut: 'I', img: 'images/tools/ruler.png' },
+  { name: 'Note Tool', shortcut: 'I', img: 'images/tools/note.png' },
+  { name: 'Count Tool', shortcut: 'I', img: 'images/tools/count.png' },
+  { name: 'Spot Healing Brush', shortcut: 'J', img: 'images/tools/spot_healing.png' },
+  { name: 'Healing Brush', shortcut: 'J', img: 'images/tools/healing_brush.png' },
+  { name: 'Patch Tool', shortcut: 'J', img: 'images/tools/patch.png' },
+  { name: 'Content-Aware Move', shortcut: 'J', img: 'images/tools/content_aware_move.png' },
+  { name: 'Red Eye Tool', shortcut: 'J', img: 'images/tools/red_eye.png' },
+  { name: 'Brush Tool', shortcut: 'B', img: 'images/tools/brush.png' },
+  { name: 'Pencil Tool', shortcut: 'B', img: 'images/tools/pencil.png' },
+  { name: 'Color Replacement', shortcut: 'B', img: 'images/tools/color_replacement.png' },
+  { name: 'Mixer Brush', shortcut: 'B', img: 'images/tools/mixer_brush.png' },
+  { name: 'Clone Stamp', shortcut: 'S', img: 'images/tools/clone_stamp.png' },
+  { name: 'Pattern Stamp', shortcut: 'S', img: 'images/tools/pattern_stamp.png' },
+  { name: 'History Brush', shortcut: 'Y', img: 'images/tools/history_brush.png' },
+  { name: 'Art History Brush', shortcut: 'Y', img: 'images/tools/art_history_brush.png' },
+  { name: 'Eraser Tool', shortcut: 'E', img: 'images/tools/eraser.png' },
+  { name: 'Background Eraser', shortcut: 'E', img: 'images/tools/bg_eraser.png' },
+  { name: 'Magic Eraser', shortcut: 'E', img: 'images/tools/magic_eraser.png' },
+  { name: 'Gradient Tool', shortcut: 'G', img: 'images/tools/gradient.png' },
+  { name: 'Paint Bucket', shortcut: 'G', img: 'images/tools/paint_bucket.png' },
+  { name: 'Blur Tool', shortcut: 'R', img: 'images/tools/blur.png' },
+  { name: 'Sharpen Tool', shortcut: 'R', img: 'images/tools/sharpen.png' },
+  { name: 'Smudge Tool', shortcut: 'R', img: 'images/tools/smudge.png' },
+  { name: 'Dodge Tool', shortcut: 'O', img: 'images/tools/dodge.png' },
+  { name: 'Burn Tool', shortcut: 'O', img: 'images/tools/burn.png' },
+  { name: 'Sponge Tool', shortcut: 'O', img: 'images/tools/sponge.png' },
+  { name: 'Pen Tool', shortcut: 'P', img: 'images/tools/pen.png' },
+  { name: 'Freeform Pen', shortcut: 'P', img: 'images/tools/freeform_pen.png' },
+  { name: 'Curvature Pen', shortcut: 'P', img: 'images/tools/curvature_pen.png' },
+  { name: 'Add Anchor Point', shortcut: 'P', img: 'images/tools/add_anchor.png' },
+  { name: 'Delete Anchor Point', shortcut: 'P', img: 'images/tools/delete_anchor.png' },
+  { name: 'Convert Point', shortcut: 'P', img: 'images/tools/convert_point.png' },
+  { name: 'Horizontal Type', shortcut: 'T', img: 'images/tools/horizontal_type.png' },
+  { name: 'Vertical Type', shortcut: 'T', img: 'images/tools/vertical_type.png' },
+  { name: 'Vertical Type Mask', shortcut: 'T', img: 'images/tools/vertical_type_mask.png' },
+  { name: 'Horizontal Type Mask', shortcut: 'T', img: 'images/tools/horizontal_type_mask.png' },
+  { name: 'Path Selection', shortcut: 'A', img: 'images/tools/path_selection.png' },
+  { name: 'Direct Selection', shortcut: 'A', img: 'images/tools/direct_selection.png' },
+  { name: 'Rectangle Tool', shortcut: 'U', img: 'images/tools/rectangle.png' },
+  { name: 'Rounded Rectangle', shortcut: 'U', img: 'images/tools/rounded_rectangle.png' },
+  { name: 'Ellipse Tool', shortcut: 'U', img: 'images/tools/ellipse.png' },
+  { name: 'Polygon Tool', shortcut: 'U', img: 'images/tools/polygon.png' },
+  { name: 'Line Tool', shortcut: 'U', img: 'images/tools/line.png' },
+  { name: 'Custom Shape', shortcut: 'U', img: 'images/tools/custom_shape.png' },
+  { name: 'Hand Tool', shortcut: 'H', img: 'images/tools/hand.png' },
+  { name: 'Rotate View', shortcut: 'R', img: 'images/tools/rotate_view.png' },
+  { name: 'Zoom Tool', shortcut: 'Z', img: 'images/tools/zoom.png' },
 ];
 
 let tcState = {};
-let tcTimer = null;
+let tcSelected = null;
+let tcSpinTimer = null;
+const LETTERS = ['A', 'B', 'C', 'D'];
 
 function showTcStart() {
   document.getElementById('tcStart').hidden = false;
   document.getElementById('tcGame').hidden = true;
   document.getElementById('tcResult').hidden = true;
-  clearInterval(tcTimer);
+}
+
+function buildDots() {
+  const dotsEl = document.getElementById('tcDots');
+  dotsEl.innerHTML = '';
+  for (let i = 0; i < tcState.total; i++) {
+    const d = document.createElement('span');
+    d.className = 'dot' + (i === tcState.current ? ' current' : '') +
+      (tcState.results && tcState.results[i] === true ? ' done' : '') +
+      (tcState.results && tcState.results[i] === false ? ' wrong-dot' : '');
+    dotsEl.appendChild(d);
+  }
 }
 
 function startToolChallenge() {
-  const picked = shuffle([...TC_TOOLS]).slice(0, 10);
-  tcState = { questions: picked, current: 0, score: 0, lives: 3, streak: 0, maxStreak: 0, total: 10 };
+  const picked = shuffle([...TC_TOOLS]);
+  tcState = { questions: picked, current: 0, score: 0, streak: 0, maxStreak: 0, total: picked.length, results: [] };
   document.getElementById('tcStart').hidden = true;
   document.getElementById('tcResult').hidden = true;
   document.getElementById('tcGame').hidden = false;
@@ -3734,114 +4116,110 @@ function startToolChallenge() {
 
 function showTcQuestion() {
   const q = tcState.questions[tcState.current];
+  tcSelected = null;
   document.getElementById('tcRound').textContent = `Round ${tcState.current + 1} / ${tcState.total}`;
-  document.getElementById('tcLives').textContent = '❤️'.repeat(tcState.lives) + '🖤'.repeat(3 - tcState.lives);
+  document.getElementById('tcLives').textContent = '';
   document.getElementById('tcFeedback').textContent = '';
   document.getElementById('tcFeedback').className = 'tc-feedback';
   document.getElementById('tcStreak').textContent = tcState.streak > 1 ? `🔥 ${tcState.streak} streak!` : '';
+  document.getElementById('tcAnswerBtn').disabled = true;
+  document.getElementById('tcSpinBtn').disabled = false;
+  document.getElementById('tcSpinLabel').textContent = 'Tap SPIN to start!';
+  document.getElementById('tcOptions').innerHTML = '';
+  buildDots();
 
-  const ring = document.getElementById('tcRing');
-  const iconEl = document.getElementById('tcIcon');
-  ring.classList.add('spinning');
-  iconEl.innerHTML = '';
-  iconEl.className = 'tc-tool-icon';
-
-  const opts = document.getElementById('tcOptions');
-  opts.innerHTML = '';
-
-  setTimeout(() => {
-    ring.classList.remove('spinning');
-    iconEl.innerHTML = q.svg;
-    iconEl.className = 'tc-tool-icon tc-icon-pop';
-
-    const wrong = TC_TOOLS.filter(t => t.name !== q.name);
-    const shuffledWrong = shuffle(wrong).slice(0, 3);
-    const allOpts = shuffle([q, ...shuffledWrong]);
-
-    allOpts.forEach(opt => {
-      const btn = document.createElement('button');
-      btn.className = 'tc-opt';
-      btn.dataset.tool = opt.name;
-      btn.innerHTML = `${opt.name}<span class="tc-kbd">${opt.shortcut}</span>`;
-      btn.addEventListener('click', () => pickTcAnswer(opt.name, q.name));
-      opts.appendChild(btn);
-    });
-
-    startTcTimer();
-  }, 1200);
+  const display = document.getElementById('tcToolDisplay');
+  display.className = 'tc-tool-display';
+  document.getElementById('tcToolImg').src = q.img;
 }
 
-function startTcTimer() {
-  clearInterval(tcTimer);
-  let timeLeft = 100;
-  const fill = document.getElementById('tcTimerFill');
-  fill.style.width = '100%';
-  fill.className = 'tc-timer-fill';
-
-  tcTimer = setInterval(() => {
-    timeLeft -= 1;
-    fill.style.width = timeLeft + '%';
-    if (timeLeft <= 20) fill.className = 'tc-timer-fill tc-timer-danger';
-    else if (timeLeft <= 40) fill.className = 'tc-timer-fill tc-timer-warn';
-
-    if (timeLeft <= 0) {
-      clearInterval(tcTimer);
-      handleTcTimeout();
-    }
-  }, 80);
-}
-
-function handleTcTimeout() {
+function spinDice() {
   const q = tcState.questions[tcState.current];
-  tcState.lives--;
-  tcState.streak = 0;
-  document.querySelectorAll('.tc-opt').forEach(btn => {
-    btn.classList.add('disabled');
-    if (btn.dataset.tool === q.name) btn.classList.add('tc-opt-correct');
-  });
-  document.getElementById('tcFeedback').textContent = `⏱️ Time's up! It was ${q.name} (${q.shortcut})`;
-  document.getElementById('tcFeedback').className = 'tc-feedback tc-fb-timeout';
-  document.getElementById('tcBox').className = 'tc-box tc-wrong';
-  setTimeout(() => { document.getElementById('tcBox').className = 'tc-box'; }, 600);
+  const spinBtn = document.getElementById('tcSpinBtn');
+  spinBtn.disabled = true;
+  document.getElementById('tcSpinLabel').textContent = '';
+  document.getElementById('tcOptions').innerHTML = '';
 
-  if (tcState.lives <= 0) {
-    setTimeout(showTcResult, 1500);
-  } else {
-    setTimeout(nextTcQuestion, 1800);
+  const display = document.getElementById('tcToolDisplay');
+  const imgEl = document.getElementById('tcToolImg');
+  display.className = 'tc-tool-display blinking';
+
+  const allTools = shuffle([...TC_TOOLS]);
+  let idx = 0;
+  let delay = 60;
+  const totalSteps = 25 + Math.floor(Math.random() * 10);
+  let step = 0;
+
+  function tick() {
+    imgEl.src = allTools[idx % allTools.length].img;
+    idx++;
+    step++;
+    if (step < totalSteps) {
+      delay += step < 15 ? 2 : step < 22 ? 8 : 25;
+      tcSpinTimer = setTimeout(tick, delay);
+    } else {
+      imgEl.src = q.img;
+      display.className = 'tc-tool-display landed';
+      document.getElementById('tcSpinLabel').textContent = 'What is this Photoshop tool?';
+
+      const wrong = TC_TOOLS.filter(t => t.name !== q.name);
+      const shuffledWrong = shuffle(wrong).slice(0, 3);
+      const allOpts = shuffle([q, ...shuffledWrong]);
+      const opts = document.getElementById('tcOptions');
+      opts.innerHTML = '';
+      allOpts.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'tc-opt';
+        btn.dataset.tool = opt.name;
+        btn.innerHTML = `<span class="tc-label-letter">${LETTERS[i]}</span>${opt.name}<span class="tc-kbd">${opt.shortcut}</span>`;
+        btn.addEventListener('click', () => selectTcOption(btn, opt.name));
+        opts.appendChild(btn);
+      });
+    }
   }
+  tcSpinTimer = setTimeout(tick, delay);
 }
 
-function pickTcAnswer(picked, correct) {
-  clearInterval(tcTimer);
-  const isCorrect = picked === correct;
+function selectTcOption(btn, toolName) {
+  if (btn.classList.contains('disabled')) return;
+  document.querySelectorAll('.tc-opt').forEach(b => b.style.borderColor = '');
+  btn.style.borderColor = 'var(--violet)';
+  tcSelected = toolName;
+  document.getElementById('tcAnswerBtn').disabled = false;
+}
+
+function submitTcAnswer() {
+  if (!tcSelected) return;
+  const q = tcState.questions[tcState.current];
+  const isCorrect = tcSelected === q.name;
 
   document.querySelectorAll('.tc-opt').forEach(btn => {
     btn.classList.add('disabled');
-    if (btn.dataset.tool === correct) btn.classList.add('tc-opt-correct');
-    if (btn.dataset.tool === picked && !isCorrect) btn.classList.add('tc-opt-wrong');
+    btn.style.borderColor = '';
+    if (btn.dataset.tool === q.name) btn.classList.add('tc-opt-correct');
+    if (btn.dataset.tool === tcSelected && !isCorrect) btn.classList.add('tc-opt-wrong');
   });
+  document.getElementById('tcAnswerBtn').disabled = true;
 
   if (isCorrect) {
     tcState.score++;
     tcState.streak++;
+    tcState.results.push(true);
     if (tcState.streak > tcState.maxStreak) tcState.maxStreak = tcState.streak;
-    document.getElementById('tcFeedback').innerHTML = `✓ Correct! <span style="color:var(--text-dim)">(${correct} — shortcut: ${tcState.questions[tcState.current].shortcut})</span>`;
+    document.getElementById('tcFeedback').innerHTML = `Correct! ${q.name} (${q.shortcut})`;
     document.getElementById('tcFeedback').className = 'tc-feedback tc-fb-correct';
     document.getElementById('tcBox').className = 'tc-box tc-correct';
   } else {
-    tcState.lives--;
     tcState.streak = 0;
-    document.getElementById('tcFeedback').innerHTML = `✗ Wrong! It was <strong>${correct}</strong> (${tcState.questions[tcState.current].shortcut})`;
+    tcState.results.push(false);
+    document.getElementById('tcFeedback').innerHTML = `Wrong! It was <strong>${q.name}</strong> (${q.shortcut})`;
     document.getElementById('tcFeedback').className = 'tc-feedback tc-fb-wrong';
     document.getElementById('tcBox').className = 'tc-box tc-wrong';
   }
+  buildDots();
   setTimeout(() => { document.getElementById('tcBox').className = 'tc-box'; }, 600);
 
-  if (tcState.lives <= 0) {
-    setTimeout(showTcResult, 1500);
-  } else {
-    setTimeout(nextTcQuestion, 1500);
-  }
+  setTimeout(nextTcQuestion, 1500);
 }
 
 function nextTcQuestion() {
@@ -3858,7 +4236,7 @@ function showTcResult() {
   document.getElementById('tcResult').hidden = false;
 
   const score = tcState.score;
-  const played = tcState.current + (tcState.lives <= 0 ? 1 : 0);
+  const played = tcState.total;
   const pct = score / tcState.total;
 
   document.getElementById('tcResultScore').textContent = score;
@@ -4315,6 +4693,26 @@ function showTcResult() {
       e.target.textContent = e.target.textContent === '👁' ? '　' : '👁';
     });
   };
+
+  // Menu dropdowns
+  document.querySelectorAll('.ps-menubar .ps-menu-item[data-menu]').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const wasActive = item.classList.contains('ps-active-menu');
+      document.querySelectorAll('.ps-menu-item').forEach(m => m.classList.remove('ps-active-menu'));
+      if (!wasActive) item.classList.add('ps-active-menu');
+    });
+    item.addEventListener('mouseenter', () => {
+      const anyOpen = document.querySelector('.ps-menu-item.ps-active-menu');
+      if (anyOpen && anyOpen !== item) {
+        anyOpen.classList.remove('ps-active-menu');
+        item.classList.add('ps-active-menu');
+      }
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.ps-menu-item').forEach(m => m.classList.remove('ps-active-menu'));
+  });
 
   // Fullscreen toggle
   const fsBtn = document.getElementById('psFullscreenBtn');
