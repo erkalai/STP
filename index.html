@@ -817,6 +817,178 @@ footer, footer * {
 .cat-create { background: rgba(255,200,50,0.1); color: #E8B830; }
 .cat-color { background: rgba(255,120,200,0.1); color: #FF78C8; }
 
+/* WINNER BOX */
+.winner-section {
+  text-align: center;
+}
+.winner-input-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+.winner-input {
+  padding: 14px 24px;
+  border-radius: 14px;
+  border: 2px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  font-size: 1.2rem;
+  font-family: 'Arial Black', sans-serif;
+  outline: none;
+  width: 300px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.winner-input:focus { border-color: var(--violet); box-shadow: 0 0 20px rgba(123,97,255,0.2); }
+.winner-input::placeholder { color: rgba(255,255,255,0.3); }
+.winner-btn {
+  padding: 14px 36px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, var(--violet), var(--accent));
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: 'Arial Black', sans-serif;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.winner-btn:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(123,97,255,0.4); }
+.winner-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+  background: radial-gradient(ellipse at center, #1a0a3e 0%, #0a0a1a 50%, #000 100%);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  overflow: hidden;
+}
+.winner-overlay.active { display: flex; animation: winnerFadeIn 0.5s ease; }
+@keyframes winnerFadeIn { from { opacity: 0; } to { opacity: 1; } }
+.winner-overlay-close {
+  position: absolute;
+  top: 20px; right: 28px;
+  font-size: 32px;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  z-index: 10;
+  background: none;
+  border: none;
+  transition: color 0.2s, transform 0.2s;
+}
+.winner-overlay-close:hover { color: #fff; transform: scale(1.2); }
+.winner-content {
+  position: relative;
+  z-index: 2;
+  animation: winnerPopIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes winnerPopIn { from { opacity: 0; transform: scale(0.3) rotate(-10deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
+.winner-trophy {
+  font-size: 100px;
+  display: block;
+  margin-bottom: 10px;
+  animation: winnerBounce 1s ease infinite, winnerTrophyShadow 2s ease infinite;
+}
+@keyframes winnerBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+@keyframes winnerTrophyShadow {
+  0%, 100% { filter: drop-shadow(0 0 20px rgba(255,230,109,0.3)); }
+  50% { filter: drop-shadow(0 0 50px rgba(255,230,109,0.7)); }
+}
+.winner-congrats {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 6px;
+  animation: winnerLetterFade 1s ease 0.3s both;
+}
+@keyframes winnerLetterFade { from { opacity: 0; letter-spacing: 1em; } to { opacity: 1; letter-spacing: 0.3em; } }
+.winner-title {
+  font-size: 3.5rem;
+  font-weight: 900;
+  background: linear-gradient(90deg, #FF6B6B, #FFE66D, #4ECDC4, #7B61FF, #FF61A6, #FF6B6B);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: winnerGradient 3s linear infinite;
+  line-height: 1.1;
+}
+@keyframes winnerGradient { to { background-position: 300% center; } }
+.winner-name {
+  font-size: 4rem;
+  font-weight: 900;
+  color: #FFE66D;
+  text-shadow: 0 0 40px rgba(255,230,109,0.5), 0 0 80px rgba(255,230,109,0.2);
+  margin: 16px 0;
+  animation: winnerGlow 1.5s ease-in-out infinite alternate, winnerNameIn 1s ease 0.5s both;
+}
+@keyframes winnerGlow {
+  from { text-shadow: 0 0 30px rgba(255,230,109,0.4), 0 0 60px rgba(255,230,109,0.1); }
+  to { text-shadow: 0 0 60px rgba(255,230,109,0.9), 0 0 120px rgba(255,230,109,0.4), 0 0 180px rgba(255,230,109,0.1); }
+}
+@keyframes winnerNameIn { from { opacity: 0; transform: translateY(30px) scale(0.8); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.winner-subtitle {
+  font-size: 1.3rem;
+  color: #4ECDC4;
+  margin-top: 4px;
+  animation: winnerSubIn 0.8s ease 0.8s both;
+}
+@keyframes winnerSubIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.winner-stars {
+  font-size: 36px;
+  letter-spacing: 10px;
+  margin-top: 16px;
+  animation: winnerHue 4s linear infinite;
+}
+@keyframes winnerHue { to { filter: hue-rotate(360deg); } }
+.winner-rings {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 600px; height: 600px;
+  pointer-events: none;
+  z-index: 1;
+}
+.winner-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  animation: winnerRingPulse 3s ease-in-out infinite;
+}
+.winner-ring:nth-child(1) { width: 300px; height: 300px; border-color: rgba(123,97,255,0.3); animation-delay: 0s; }
+.winner-ring:nth-child(2) { width: 450px; height: 450px; border-color: rgba(78,205,196,0.2); animation-delay: 0.5s; }
+.winner-ring:nth-child(3) { width: 600px; height: 600px; border-color: rgba(255,107,107,0.15); animation-delay: 1s; }
+@keyframes winnerRingPulse {
+  0%, 100% { transform: translate(-50%,-50%) scale(0.8); opacity: 0.3; }
+  50% { transform: translate(-50%,-50%) scale(1.1); opacity: 0.8; }
+}
+.confetti-canvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
+@media (max-width: 600px) {
+  .winner-title { font-size: 2rem; }
+  .winner-name { font-size: 2.5rem; }
+  .winner-trophy { font-size: 70px; }
+}
+
 /* FOOTER */
 .footer {
   padding: 60px 32px;
@@ -3413,6 +3585,37 @@ footer, footer * {
   </div>
 </section>
 
+<!-- WINNER BOX -->
+<section class="section winner-section" id="winner">
+  <div class="reveal">
+    <div class="section-label label-cyan">Celebrate</div>
+    <h2 class="section-title">Winner Spotlight</h2>
+    <p class="section-desc">Type your name and hit the button to celebrate!</p>
+  </div>
+  <div class="winner-input-wrap reveal">
+    <input type="text" class="winner-input" id="winnerInput" placeholder="Enter your name..." maxlength="30">
+    <button class="winner-btn" id="winnerBtn" onclick="celebrateWinner()">Celebrate!</button>
+  </div>
+</section>
+
+<div class="winner-overlay" id="winnerOverlay">
+  <button class="winner-overlay-close" onclick="closeWinner()">&times;</button>
+  <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
+  <div class="winner-rings">
+    <div class="winner-ring"></div>
+    <div class="winner-ring"></div>
+    <div class="winner-ring"></div>
+  </div>
+  <div class="winner-content">
+    <span class="winner-trophy">🏆</span>
+    <div class="winner-congrats">CONGRATULATIONS</div>
+    <div class="winner-title">WORKSHOP CHAMPION</div>
+    <div class="winner-name" id="winnerName"></div>
+    <div class="winner-subtitle">Photoshop Master - Level Unlocked!</div>
+    <div class="winner-stars">⭐🌟✨🌟⭐</div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-brand">Ps <span class="accent">Workshop</span></div>
@@ -3535,6 +3738,74 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowRight') { changeCarouselTool(1); e.preventDefault(); }
 });
 showCarouselTool();
+
+// WINNER CELEBRATION
+let confettiAnim = null;
+function celebrateWinner() {
+  const input = document.getElementById('winnerInput');
+  const name = input.value.trim();
+  if (!name) { input.focus(); return; }
+  document.getElementById('winnerName').textContent = name;
+  const overlay = document.getElementById('winnerOverlay');
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  requestAnimationFrame(() => launchConfetti());
+}
+function closeWinner() {
+  document.getElementById('winnerOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+  if (confettiAnim) { cancelAnimationFrame(confettiAnim); confettiAnim = null; }
+}
+document.getElementById('winnerInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') celebrateWinner();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && document.getElementById('winnerOverlay').classList.contains('active')) closeWinner();
+});
+function launchConfetti() {
+  const canvas = document.getElementById('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const colors = ['#FF6B6B','#FFE66D','#4ECDC4','#7B61FF','#FF61A6','#61AFFF','#FF9F43','#26DE81','#FC5C65','#45AAF2','#FD79A8','#A29BFE','#FFEAA7','#81ECEC'];
+  const pieces = [];
+  for (let i = 0; i < 250; i++) {
+    pieces.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * -canvas.height,
+      w: Math.random() * 12 + 4,
+      h: Math.random() * 8 + 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vy: Math.random() * 4 + 2,
+      vx: (Math.random() - 0.5) * 3,
+      rot: Math.random() * 360,
+      rv: (Math.random() - 0.5) * 10,
+      wobble: Math.random() * Math.PI * 2,
+      wobbleSpeed: Math.random() * 0.05 + 0.02
+    });
+  }
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(p => {
+      p.y += p.vy;
+      p.wobble += p.wobbleSpeed;
+      p.x += p.vx + Math.sin(p.wobble) * 0.5;
+      p.rot += p.rv;
+      if (p.y > canvas.height + 20) { p.y = -20; p.x = Math.random() * canvas.width; }
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI / 180);
+      ctx.globalAlpha = 0.9;
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    });
+    frame++;
+    if (frame < 600) confettiAnim = requestAnimationFrame(draw);
+  }
+  draw();
+}
 
 // TOOL EXPLORER
 document.querySelectorAll('.explorer-btn').forEach(btn => {
